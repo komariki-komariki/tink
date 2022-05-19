@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
-# from docxtpl import DocxTemplate
+from docxtpl import DocxTemplate
 import re
 from pprint import pprint
 
@@ -35,7 +35,7 @@ HEADERS = {
 all_requisites = 'https://www.tinkoff.ru/business/contractor/legal/1154253005466/requisites/'
 
 def requisites():
-    url = 'https://www.tinkoff.ru/business/contractor/legal/1026605616850/requisites/'
+    url = 'https://www.tinkoff.ru/business/contractor/legal/1187746633425/requisites/'
     page = requests.get(url, headers=HEADERS).content
     soup = BeautifulSoup(page, "html.parser")
     # z = soup.find_all('span', class_='emz9Oe')
@@ -50,8 +50,8 @@ def requisites():
     for i in names_list:
         if i == "":
             names_list.remove(i)
-    # print(names_list)
-    # print(values_list)
+    # print(len(names_list))
+    # print(len(values_list))
 
 def csv_w():
     with open("data.csv", mode="w", encoding='utf-8') as w_file:
@@ -60,15 +60,26 @@ def csv_w():
         file_writer.writerow(values_list)
 
 def word():
-    doc = DocxTemplate("шаблон.docx")
-    context = {'inn': '00000000'}
+    doc = DocxTemplate("testing.docx")
+    # context = {'ИНН': union_dict(), 'ogrn': '222222','ggg': 'fjsngfnjkd'}
+    context = union_dict()
     doc.render(context)
-    doc.save("ИНН.docx")
+    doc.save("test.docx")
 
 def union_dict():
-    my_dict = dict(zip(my_list_all, values_list))
-    my_dict_2 = dict(zip(names_list, values_list))
-    pprint(my_dict_2)
+    if len(names_list) == len(values_list):
+        my_dict = dict(zip(names_list, values_list))
+        return my_dict
+    else:
+        a = len(values_list) - len(names_list)
+        b = []
+        print(a)
+        print(names_list[8])
+        for i in range(a+1):
+            k = 8 + i
+            b.append(values_list[k])
+        print(b)
 
 requisites()
-union_dict()
+print(union_dict())
+
